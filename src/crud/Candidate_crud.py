@@ -11,16 +11,20 @@ from src.schemas.Candidate_schema import CandidateCreate
 
 
 def create_candidate(db: Session, candidate_data: CandidateCreate) -> Candidate:
-    """Registra un nuevo candidato, validando que no este registrado como votante."""
-    is_voter = (
-        db.query(Voter).filter(Voter.name.ilike(candidate_data.name.strip())).first()
-    )
+    """Registra un nuevo candidato, validando nombre unico y que no sea votante."""
+    name = candidate_data.name.strip()
+
+    existing_candidate = db.query(Candidate).filter(Candidate.name.ilike(name)).first()
+    if existing_candidate:
+        raise ConflictError(f"Ya existe un candidato registrado con el nombre '{name}'")
+
+    is_voter = db.query(Voter).filter(Voter.name.ilike(name)).first()
     if is_voter:
         raise ConflictError(
             f"'{candidate_data.name}' ya esta registrado como votante y no puede ser candidato"
         )
 
-    candidate = Candidate(name=candidate_data.name.strip(), party=candidate_data.party)
+    candidate = Candidate(name=name, party=candidate_data.party)
     db.add(candidate)
     db.commit()
     db.refresh(candidate)

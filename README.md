@@ -36,8 +36,8 @@ votaciones/
 ### 1. Clonar el repositorio
 
 ```bash
-git clone <url-del-repositorio>
-cd votaciones
+git clone https://github.com/Eduardin14/Prueba-SistemaVotacionesv.1.git
+cd Prueba-SistemaVotacionesv.1
 ```
 
 ### 2. Crear entorno virtual e instalar dependencias
@@ -54,9 +54,9 @@ pip install -r requirements.txt
 cp .env.example .env
 ```
 
-Por defecto, si no defines `DATABASE_URL`, el proyecto usa **SQLite** (`dev.db`) automáticamente — no necesitas instalar ni configurar nada más para probarlo localmente.
+Por defecto, si no defines `DATABASE_URL` para usar tu version en la nube o local de PostgreSQL, el proyecto usa **SQLite** (`dev.db`) automáticamente — no necesitas instalar ni configurar nada más para probarlo localmente.
 
-Para usar PostgreSQL o MySQL, define en `.env`:
+Para usar PostgreSQL define en `.env`:
 
 ```
 DATABASE_URL=postgresql://usuario:password@localhost:5432/votaciones_db
@@ -86,7 +86,7 @@ python seed_db.py
 
 Esto crea 3 candidatos, 5 votantes y 5 votos de ejemplo.
 
-### 7. (Opcional) Generar la gráfica de resultados
+### 7. Generar la gráfica de resultados
 
 ```bash
 python generate_chart.py
@@ -183,16 +183,13 @@ Respuesta de ejemplo:
 - Un votante no puede registrarse si su nombre ya existe como candidato (y viceversa).
 - Un votante no puede emitir más de un voto (`has_voted` se valida y actualiza automáticamente).
 - El `candidate_id` de un voto debe existir, de lo contrario se retorna `404`.
+- El candidato debe ser unico, por lo tanto no se pueden crear mas de un candidato con el mismo nombre/partido
 - Al emitir un voto, se incrementa automáticamente el contador `votes` del candidato.
 - Errores de validación (`422`), recursos no encontrados (`404`), conflictos (`409`) y solicitudes inválidas (`400`) devuelven respuestas estructuradas y consistentes.
 
 ## Capturas de las estadísticas
 
-_Agrega aquí una captura de `statistics_chart.png` (generado con `generate_chart.py`) y/o del endpoint `/votes/statistics` desde Swagger o Postman antes de subir el repo._
-
-```
-![Grafica de resultados](statistics_chart.png)
-```
+FALTA
 
 ## Notas de arquitectura
 
